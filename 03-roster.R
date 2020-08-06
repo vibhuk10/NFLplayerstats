@@ -172,4 +172,7 @@ full_roster_19 <-
   roster %>% 
   distinct(id, .keep_all = TRUE)
 
+
 full_roster_19 %>% write_csv("data-raw/NFL_full_roster_2019.csv")
+
+
