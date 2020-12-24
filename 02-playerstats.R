@@ -25,7 +25,8 @@ final <-
     ~passing_yards, ~passing_touchdowns, ~air_yards, ~qb_scrambles,
     ~fumbles
   )
-for (i in 1:nrow(roster_19)) {            
+for (i in 1:nrow(roster_19)) {
+  print(i)
   nameTemp <- get_var(i, 3, roster_19)
   idTemp <- get_var(i, 7, roster_19)
   positionTemp <- get_var(i, 6, roster_19)
