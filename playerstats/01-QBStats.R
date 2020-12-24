@@ -1,5 +1,5 @@
-# passingDataTest <- 
-#   fastpbp_20 %>% 
+# passingDataTest <-
+#   fastpbp_20 %>%
 #   filter(passer_player_id == "00-0035232",
 #          sack == 0)
 # names(fastpbp_20)
@@ -27,7 +27,8 @@ QBStats <-
     ~total_yards, ~total_touchowns,
     ~rushing_yards, ~rushing_touchdowns,
     ~passing_yards, ~passing_touchdowns, ~air_yards, ~interceptions,
-    ~attempts, ~ypa, ~completions, ~cmp_percentage, ~passer_rating,
+    ~attempts, ~ypa, ~completions, ~cmp_pct, ~passer_rating,
+    ~left_pct, ~middle_pct, ~right_pct,
     ~sacks, ~sack_rate, ~qb_hits, ~qb_hit_rate,
     ~qb_scrambles, ~fumbles
   )
@@ -103,7 +104,7 @@ for (i in 1:nrow(fastroster_20_QB)) {
   }
   
   # completion percentage
-  cmp_percentage <- round(completions/attempts, digits = 3)
+  cmp_pct <- round(completions/attempts, digits = 3)
   
   # yards per attempt
   ypa <- round(passing_yards/attempts, digits=1)
@@ -116,6 +117,11 @@ for (i in 1:nrow(fastroster_20_QB)) {
     ((passing_tds/attempts)*20) +
     (2.375-(interceptions/attempts*25)))/6)*100,
     digits = 1)
+  
+  # left right middle throws percentage
+  left_pct <- round((nrow(passingData %>% filter(pass_location == "left"))/nrow(passingData)), digits = 3)
+  middle_pct <- round((nrow(passingData %>% filter(pass_location == "middle"))/nrow(passingData)), digits = 3)
+  right_pct <- round((nrow(passingData %>% filter(pass_location == "right"))/nrow(passingData)), digits = 3)
   
   # fumbles
   fumbles <- 0
@@ -150,8 +156,11 @@ for (i in 1:nrow(fastroster_20_QB)) {
       attempts = c(attempts),
       ypa = c(ypa),
       completions = c(completions),
-      cmp_percentage = c(cmp_percentage),
+      cmp_pct = c(cmp_pct),
       passer_rating = c(passer_rating),
+      left_pct = c(left_pct),
+      middle_pct = c(middle_pct),
+      right_pct = c(right_pct),
       sacks = c(sacks),
       sack_rate = c(sack_rate),
       qb_hits = c(qb_hits),
