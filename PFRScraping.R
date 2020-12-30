@@ -65,11 +65,11 @@ scrapePFRData = function(urlend, startyr, endyr, numTable) {
 # tibble for each data set that is scraped through scrapePFRData
 PFRDataNames <- 
   tibble(
-    varName = c('stanPass_20','stanRush_20','stanRecv_20', 'advPassAY_20', 'advPassAcc_20'),
-    urlend = c('/passing.htm', '/rushing.htm', '/receiving.htm', '/passing_advanced.htm', '/passing_advanced.htm'),
-    startyr = c(2020, 2020, 2020, 2020, 2020),
-    endyr = c(2020, 2020, 2020, 2020, 2020),
-    numTable = c(1, 1, 1, 1, 2)
+    varName = c('stanPass_20','stanRush_20','stanRecv_20', 'advPassAY_20', 'advPassAcc_20', 'advPassPressure_20', 'advPassPlayType_20'),
+    urlend = c('/passing.htm', '/rushing.htm', '/receiving.htm', '/passing_advanced.htm', '/passing_advanced.htm', '/passing_advanced.htm', '/passing_advanced.htm'),
+    startyr = c(2020, 2020, 2020, 2020, 2020, 2020, 2020),
+    endyr = c(2020, 2020, 2020, 2020, 2020, 2020, 2020),
+    numTable = c(1, 1, 1, 1, 2, 3, 4)
   )
 
 # for loop to scrape each dataset in PFRDataNames through ScrapePFRData
