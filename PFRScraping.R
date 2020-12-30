@@ -55,6 +55,8 @@ scrapePFRData = function(urlend, startyr, endyr, numTable) {
     # reset the row numbers
     rownames(table) <- seq(length=nrow(table))
     table$Year = i
+    # convert rows of data frame to correct types
+    table <- type_convert(table)
     df <- rbind(table, df)
   }
   df
@@ -95,6 +97,8 @@ cleanPFRData = function(df, year) {
   }
   #add the year
   df$Year = year
+  # convert rows of data frame to correct types
+  df <- type_convert(df)
   df
 }
 
