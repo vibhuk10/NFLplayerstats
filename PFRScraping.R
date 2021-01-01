@@ -41,8 +41,8 @@ scrapePFRData = function(urlend, startyr, endyr, numTable) {
       }
     }
     table <- table[-c(extraRowNums),]
-    #remove asterisk in the player name
     for(c in 1:ncol(table)) {
+      #remove asterisk in the player name
       if(colnames(table)[c] ==  "Player") {
         for(d in 1:nrow(table)) {
           if(grepl("*", getVar(table, d, c), fixed = TRUE)) {
@@ -51,31 +51,46 @@ scrapePFRData = function(urlend, startyr, endyr, numTable) {
           table[d,c] = trimws(getVar(table, d, c))
         }
       }
+      #remove percentage symbol
+      if(grepl("%", colnames(table)[c], fixed = TRUE)) {
+        for(d in 1:nrow(table)) {
+          table[d,c] = gsub("%","", getVar(table, d, c), fixed = TRUE)
+        }
+      }
+    }
+    # convert rows of data frame to correct types
+    table <- type_convert(table)
+    # change to decimal
+    for(c in 1:ncol(table)) {
+      if(grepl("%", colnames(table)[c], fixed = TRUE)) {
+        for(d in 1:nrow(table)) {
+          table[d,c] = getVar(table, d, c)/100
+        }
+      }
     }
     # reset the row numbers
     rownames(table) <- seq(length=nrow(table))
     table$Year = i
     # convert rows of data frame to correct types
-    table <- type_convert(table)
     df <- rbind(table, df)
   }
   df
 }
 
 # tibble for each data set that is scraped through scrapePFRData
-PFRDataNames <- 
-  tibble(
-    varName = c('stanPass_20','stanRush_20','stanRecv_20', 'advPassAY_20', 'advPassAcc_20', 'advPassPressure_20', 'advPassPlayType_20'),
-    urlend = c('/passing.htm', '/rushing.htm', '/receiving.htm', '/passing_advanced.htm', '/passing_advanced.htm', '/passing_advanced.htm', '/passing_advanced.htm'),
-    startyr = c(2020, 2020, 2020, 2020, 2020, 2020, 2020),
-    endyr = c(2020, 2020, 2020, 2020, 2020, 2020, 2020),
-    numTable = c(1, 1, 1, 1, 2, 3, 4)
-  )
-
-# for loop to scrape each dataset in PFRDataNames through ScrapePFRData
-for(i in 1:nrow(PFRDataNames)) {
-  assign(getVar(PFRDataNames, i, 1), scrapePFRData(getVar(PFRDataNames, i, 2), getVar(PFRDataNames, i, 3), getVar(PFRDataNames, i, 4), getVar(PFRDataNames, i, 5)))
-}
+# PFRDataNames <- 
+#   tibble(
+#     varName = c('stanPass_20','stanRush_20','stanRecv_20', 'advPassAY_20', 'advPassAcc_20', 'advPassPressure_20', 'advPassPlayType_20'),
+#     urlend = c('/passing.htm', '/rushing.htm', '/receiving.htm', '/passing_advanced.htm', '/passing_advanced.htm', '/passing_advanced.htm', '/passing_advanced.htm'),
+#     startyr = c(2020, 2020, 2020, 2020, 2020, 2020, 2020),
+#     endyr = c(2020, 2020, 2020, 2020, 2020, 2020, 2020),
+#     numTable = c(1, 1, 1, 1, 2, 3, 4)
+#   )
+# 
+# # for loop to scrape each data set in PFRDataNames through ScrapePFRData
+# for(i in 1:nrow(PFRDataNames)) {
+#   assign(getVar(PFRDataNames, i, 1), scrapePFRData(getVar(PFRDataNames, i, 2), getVar(PFRDataNames, i, 3), getVar(PFRDataNames, i, 4), getVar(PFRDataNames, i, 5)))
+# }
 
 # clean PFR data for downloaded files
 cleanPFRData = function(df, year) {
