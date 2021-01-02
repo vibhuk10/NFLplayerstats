@@ -7,7 +7,7 @@ library(tidyverse)
 library(purrr)
 library(nflfastR)
 # get PFR QB Data
-source("./PFRScraping.R")
+source("./scraping/PFRScraping.R")
 PFRDataNames <- 
   tibble(
     varName = c('stanPass_20', 'advPassAY_20', 'advPassAcc_20', 'advPassPressure_20'),
