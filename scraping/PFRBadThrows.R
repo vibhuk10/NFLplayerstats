@@ -41,23 +41,29 @@ pfr <- pfr_raw %>%
   # join colors and logos from nflfastR
   left_join(nflfastR::teams_colors_logos, by = c("team" = "team_abbr"))
 
-chart_data <- pfr %>% filter(Passattempts > 60)
+chart_data <- 
+  pfr %>% 
+  filter(Passattempts > 60) %>% 
+  mutate(niner = ifelse(team == "SF", "y", "n")) %>% 
+  filter(Player != "Kyle Allen") %>% 
+  filter(Player != "Jake Luton") %>% 
+  filter(Player != "Jalen Hurts")
 
-chart_data %>%
+test <- 
+  chart_data %>%
   ggplot(aes(x = IAY.PA, y = Bad. / 100)) +
   geom_hline(aes(yintercept = mean(Bad. / 100)), color = "red", linetype = "dotted") +
   geom_vline(aes(xintercept = mean(IAY.PA)), color = "red", linetype = "dotted") +
   geom_smooth(method = "lm", se = FALSE, color = "black", size = 0.3) +
   geom_point(color = chart_data$team_color, aes(cex = Passattempts), alpha = 1 / 4) +
-  ggrepel::geom_text_repel(aes(label = Player), force = 1, point.padding = 0, segment.size = 0.1, size = 3) +
+  ggrepel::geom_text_repel(aes(label = Player, color = niner), force = 1, point.padding = 0, segment.size = 0.1, size = 3.5) +
+  scale_colour_manual(values = c("y" = "red", "n" = "black"), guide = FALSE) +
   scale_y_continuous(labels = scales::percent) +
   scale_size_area(max_size = 6) +
   labs(
     x = "Average Depth of Target in Yards",
     y = "Bad Throw Percentage",
-    caption = "Bad Throw Percentage = Percentage of throws that weren't catchable with normal effort, excluding spikes and throwaways\nFigure: @mrcaseb | Data: @pfref",
-    title = "QB Passing Performance 2019",
-    subtitle = "We may see regression hitting Tannehill and Prescott in 2020"
+    title = "QB Passing Performance 2020"
   ) +
   ggthemes::theme_stata(scheme = "sj", base_size = 8) +
   theme(
@@ -66,6 +72,7 @@ chart_data %>%
     axis.text.y = element_text(angle = 0, vjust = 0.5),
     legend.title = element_text(size = 8, hjust = 0, vjust = 0.5, face = "bold"),
     legend.position = "top",
-    aspect.ratio = 1 / 1.618
+    aspect.ratio = 1 / 1.618,
   ) +
   NULL
+test
