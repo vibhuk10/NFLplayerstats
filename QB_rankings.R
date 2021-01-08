@@ -95,7 +95,6 @@ for (i in 1:nrow(fastroster_20_QB)) {
     rbind(QBStats, tempQBStats)
 }
 QBStats[is.na(QBStats)] <- 0
-QBStats %>% count(name)
 
 QBRankingData <- left_join(QBStats, 
                            stanPass_20 %>% 

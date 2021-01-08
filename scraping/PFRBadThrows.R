@@ -2,7 +2,7 @@ library(tidyverse)
 library(rvest)
 
 # scrape data from PFR----------------------------------------------------------
-url <- "https://www.pro-football-reference.com/years/2020/passing_advanced.htm"
+url <- "https://www.pro-football-reference.com/years/2019/passing_advanced.htm"
 pfr_raw <- url %>%
   read_html() %>%
   html_table() %>%
@@ -43,11 +43,11 @@ pfr <- pfr_raw %>%
 
 chart_data <- 
   pfr %>% 
-  filter(Passattempts > 60) %>% 
-  mutate(niner = ifelse(team == "SF", "y", "n")) %>% 
-  filter(Player != "Kyle Allen") %>% 
-  filter(Player != "Jake Luton") %>% 
-  filter(Player != "Jalen Hurts")
+  filter(Passattempts > 100) %>% 
+  mutate(niner = ifelse(team == "SF", "y", "n"))
+  #filter(Player != "Kyle Allen") %>% 
+  #filter(Player != "Jake Luton") %>% 
+  #filter(Player != "Jalen Hurts")
 
 test <- 
   chart_data %>%
@@ -63,7 +63,7 @@ test <-
   labs(
     x = "Average Depth of Target in Yards",
     y = "Bad Throw Percentage",
-    title = "QB Passing Performance 2020"
+    title = "QB Passing Performance 2019"
   ) +
   ggthemes::theme_stata(scheme = "sj", base_size = 8) +
   theme(
